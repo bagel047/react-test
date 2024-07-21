@@ -29,7 +29,12 @@ export default function Customer() {
 
   useEffect(() => {
     const url = baseUrl + "api/customers/" + id;
-    fetch(url)
+    fetch(url, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + localStorage.getItem("access"),
+      },
+    })
       .then((response) => {
         // redirect to a 404 page (new URL)
         // if (response.status === 404) {
@@ -39,6 +44,8 @@ export default function Customer() {
         // render a 404 component in this page
         if (response.status === 404) {
           setNotFound(true);
+        } else if (response.status === 401) {
+          navigate("/login");
         }
 
         if (!response.ok) {
@@ -65,10 +72,15 @@ export default function Customer() {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Authorization: "Bearer " + localStorage.getItem("access"),
       },
       body: JSON.stringify(tempCustomer),
     })
       .then((response) => {
+        if (response.status === 401) {
+          navigate("/login");
+        }
+
         if (!response.ok) {
           throw new Error("Something went wrong");
         }
@@ -164,9 +176,14 @@ export default function Customer() {
                 method: "DELETE",
                 headers: {
                   "Content-Type": "application/json",
+                  Authorization: "Bearer " + localStorage.getItem("access"),
                 },
               })
                 .then((response) => {
+                  if (response.status === 401) {
+                    navigate("/login");
+                  }
+
                   if (!response.ok) {
                     throw new Error("Something went wrong");
                   }
