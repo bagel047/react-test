@@ -62,7 +62,7 @@ export default function Definition() {
     <>
       {word ? (
         <>
-          <h1>Here are definitions:</h1>
+          <h1 className="mb-12">Here are definitions:</h1>
           {word?.map((meaning) => {
             return (
               <p key={uuidv4()}>

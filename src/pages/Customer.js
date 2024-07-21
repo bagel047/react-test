@@ -8,14 +8,23 @@ export default function Customer() {
   const [customer, setCustomer] = useState();
   const [tempCustomer, setTempCustomer] = useState();
   const [changed, setChanged] = useState(false);
+  const [error, setError] = useState("");
 
   const [notFound, setNotFound] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
-    console.log("customer", customer);
-    console.log("temp", tempCustomer);
-    console.log("changed", changed);
+    if (!customer || !tempCustomer) return;
+
+    let equal = true;
+
+    if (customer.name !== tempCustomer.name) equal = false;
+
+    if (customer.industry !== tempCustomer.industry) equal = false;
+
+    if (equal) {
+      setChanged(false);
+    }
   });
 
   useEffect(() => {
@@ -32,15 +41,25 @@ export default function Customer() {
           setNotFound(true);
         }
 
+        if (!response.ok) {
+          throw new Error("Something went wrong, try again later");
+        }
+
         return response.json();
       })
       .then((data) => {
         setCustomer(data.customer);
         setTempCustomer(data.customer);
+        setError(undefined);
+      })
+      .catch((e) => {
+        setError(e.message);
       });
   }, []);
 
-  function updateCustomer() {
+  function updateCustomer(e) {
+    e.preventDefault();
+
     const url = baseUrl + "api/customers/" + id;
     fetch(url, {
       method: "POST",
@@ -50,43 +69,77 @@ export default function Customer() {
       body: JSON.stringify(tempCustomer),
     })
       .then((response) => {
+        if (!response.ok) {
+          throw new Error("Something went wrong");
+        }
+
         return response.json();
       })
       .then((data) => {
         setCustomer(data.customer);
         setChanged(false);
+        setError(undefined);
+      })
+      .catch((e) => {
+        setError(e.message);
       });
   }
 
   return (
-    <>
+    <div className="p-3">
       {notFound ? <NotFound /> : null}
       {customer ? (
-        <>
-          <p className="px-2 block my-2">ID: {customer.id}</p>
-          <input
-            className="px-2 block my-2"
-            type="text"
-            value={tempCustomer.name}
-            onChange={(e) => {
-              setTempCustomer({ ...tempCustomer, name: e.target.value });
-              setChanged(true);
-            }}
-          ></input>
-          <input
-            className="px-2 block my-2"
-            type="text"
-            value={tempCustomer.industry}
-            onChange={(e) => {
-              setTempCustomer({ ...tempCustomer, industry: e.target.value });
-              setChanged(true);
-            }}
-          ></input>
+        <div>
+          <p className="font-bold">ID: {customer.id}</p>
+          <form
+            id="customerForm"
+            onSubmit={updateCustomer}
+            className="w-full max-w-sm"
+          >
+            <div className="md:flex md:items-center mb-6">
+              <div className="md:w-1/3">
+                <label htmlFor="name">Name</label>
+              </div>
+              <div className="md:w-2/3">
+                <input
+                  id="name"
+                  className="bg-gray-100 appearance-none border-1 border-gray-300 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
+                  type="text"
+                  value={tempCustomer.name}
+                  onChange={(e) => {
+                    setTempCustomer({ ...tempCustomer, name: e.target.value });
+                    setChanged(true);
+                  }}
+                ></input>
+              </div>
+            </div>
+
+            <div className="md:flex md:items-center mb-6">
+              <div className="md:w-1/3">
+                <label htmlFor="industry">Industry</label>
+              </div>
+              <div className="md:w-2/3">
+                <input
+                  id="industry"
+                  className="bg-gray-100 appearance-none border-1 border-gray-300 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
+                  type="text"
+                  value={tempCustomer.industry}
+                  onChange={(e) => {
+                    setTempCustomer({
+                      ...tempCustomer,
+                      industry: e.target.value,
+                    });
+                    setChanged(true);
+                  }}
+                ></input>
+              </div>
+            </div>
+          </form>
 
           {changed ? (
-            <>
+            <div className="mb-2">
               <button
-                className="mr-2"
+                className="mr-2 bg-slate-500 hover:bg-gray-700 text-white py-1 px-3 rounded"
                 onClick={(e) => {
                   setTempCustomer({ ...customer });
                   setChanged(false);
@@ -94,12 +147,17 @@ export default function Customer() {
               >
                 Cancel
               </button>
-              <button onClick={updateCustomer}>Save</button>
-            </>
+              <button
+                className="bg-purple-600 hover:bg-purple-800 text-white py-1 px-3 rounded"
+                form="customerForm"
+              >
+                Save
+              </button>
+            </div>
           ) : null}
 
           <button
-            className="block"
+            className="block bg-slate-800 hover:bg-red-700 text-white py-1 px-3 rounded"
             onClick={(e) => {
               const url = baseUrl + "api/customers/" + id;
               fetch(url, {
@@ -115,16 +173,22 @@ export default function Customer() {
                   navigate("/customers");
                 })
                 .catch((e) => {
-                  console.log(e);
+                  setError(e.message);
                 });
             }}
           >
             Delete
           </button>
-          <br></br>
-          <Link to="/customers">Go back</Link>
-        </>
+        </div>
       ) : null}
-    </>
+      {error ? <p>{error}</p> : null}
+      <br></br>
+      <Link
+        to="/customers"
+        className="bg-slate-500 hover:bg-gray-700 text-white py-1 px-3 rounded no-underline"
+      >
+        ← Go back
+      </Link>
+    </div>
   );
 }
