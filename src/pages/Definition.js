@@ -3,13 +3,16 @@ import { v4 as uuidv4 } from "uuid";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import NotFound from "../components/NotFound";
 import DefinitionSearch from "../components/DefinitionSearch";
+import { useLocation } from "react-router-dom";
 
 export default function Definition() {
   const [word, setWord] = useState();
-  let { search } = useParams();
-  const navigate = useNavigate();
   const [notFound, setNotFound] = useState(false);
   const [error, setError] = useState();
+
+  let { search } = useParams();
+  const location = useLocation();
+  const navigate = useNavigate();
 
   // useEffect:
   // no dependency array --> update for any state change
@@ -23,8 +26,6 @@ export default function Definition() {
       .then((response) => {
         if (response.status === 404) {
           setNotFound(true);
-        } else if (response.status === 401) {
-          navigate("/login");
         }
 
         if (!response.ok) {
