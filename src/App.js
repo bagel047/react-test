@@ -9,6 +9,7 @@ import Definition from "./pages/Definition";
 import NotFound from "./components/NotFound";
 import Customer from "./pages/Customer";
 import Login from "./pages/Login";
+import Register from "./pages/Register";
 import { baseUrl } from "./shared";
 
 export const LoginContext = createContext();
@@ -62,6 +63,7 @@ function App() {
             <Route path="/customers" element={<Customers />}></Route>
             <Route path="/customers/:id" element={<Customer />}></Route>
             <Route path="/login" element={<Login />}></Route>
+            <Route path="/register" element={<Register />}></Route>
             <Route path="/404" element={<NotFound />}></Route>
             <Route path="*" element={<NotFound />}></Route>
           </Routes>

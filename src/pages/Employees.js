@@ -69,7 +69,7 @@ function Employees() {
   }
 
   return (
-    <div id="employees" className="">
+    <div id="employees" className="mt-12">
       <div className="flex flex-wrap justify-center">
         {employees.map((employee) => {
           const editEmployee = (

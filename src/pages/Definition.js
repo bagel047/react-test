@@ -60,10 +60,10 @@ export default function Definition() {
   }
 
   return (
-    <>
+    <div className="mt-12">
       {word ? (
         <>
-          <h1 className="mb-12">Here are definitions:</h1>
+          <h1 className="mb-8">Here are definitions:</h1>
           {word?.map((meaning) => {
             return (
               <p key={uuidv4()}>
@@ -73,8 +73,8 @@ export default function Definition() {
           })}
         </>
       ) : null}
-      <p>Search again:</p>
+      <p className="mt-8">Search again:</p>
       <DefinitionSearch />
-    </>
+    </div>
   );
 }

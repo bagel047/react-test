@@ -15,7 +15,7 @@ export default function AddCustomer(props) {
     <>
       <button
         onClick={props.toggleShow}
-        className="block mt-12 bg-slate-100 border-1 border-solid border-slate-400 text-purple-600 font-bold hover:bg-purple-600 hover:text-white py-2 px-6 rounded"
+        className="block mt-8 bg-slate-100 border-1 border-solid border-slate-400 text-purple-600 font-bold hover:bg-purple-600 hover:text-white py-2 px-6 rounded"
       >
         + Add Customer
       </button>

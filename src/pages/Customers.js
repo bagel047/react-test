@@ -73,8 +73,8 @@ export default function Customers() {
   }
 
   return (
-    <>
-      <h1 className="mb-12">Here are our customers:</h1>
+    <div className="mt-12">
+      <h1 className="mb-8">Here are our customers:</h1>
       {customers
         ? customers.map((customer) => {
             return (
@@ -93,6 +93,6 @@ export default function Customers() {
         show={show}
         toggleShow={toggleShow}
       />
-    </>
+    </div>
   );
 }
