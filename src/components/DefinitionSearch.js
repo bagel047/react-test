@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 export default function DefinitionSearch() {
@@ -9,7 +9,7 @@ export default function DefinitionSearch() {
     <form
       className="flex space-between space-x-2 max-w-[300px]"
       onSubmit={(e) => {
-        e.preventDefault();
+        // e.preventDefault();
         navigate("/dictionary/" + word);
       }}
     >
@@ -19,7 +19,6 @@ export default function DefinitionSearch() {
         type="text"
         onChange={(e) => {
           setWord(e.target.value);
-          console.log(word);
         }}
       />
       <button className="rounded bg-gray-800 hover:bg-gray-900 text-white px-3 py-1">

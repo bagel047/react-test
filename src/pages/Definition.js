@@ -16,7 +16,7 @@ export default function Definition() {
   const navigate = useNavigate();
 
   const url = "https://api.dictionaryapi.dev/api/v2/entries/en/" + search;
-  const [word, errorStatus] = useFetch(url);
+  const { data: [{ meanings: word }] = [{}], errorStatus } = useFetch(url);
   console.log(word);
 
   // useEffect:
@@ -67,10 +67,10 @@ export default function Definition() {
 
   return (
     <div className="mt-12">
-      {word?.[0]?.meanings ? (
+      {word ? (
         <>
           <h1 className="mb-8">Here are definitions:</h1>
-          {word[0].meanings.map((meaning) => {
+          {word.map((meaning) => {
             return (
               <p key={uuidv4()}>
                 {meaning.partOfSpeech}: {meaning.definitions[0].definition}
