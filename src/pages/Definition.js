@@ -16,8 +16,15 @@ export default function Definition() {
   const navigate = useNavigate();
 
   const url = "https://api.dictionaryapi.dev/api/v2/entries/en/" + search;
-  const { data: [{ meanings: word }] = [{}], errorStatus } = useFetch(url);
-  console.log(word);
+  const {
+    request,
+    data: [{ meanings: word }] = [{}],
+    errorStatus,
+  } = useFetch(url);
+
+  useEffect(() => {
+    request();
+  }, []);
 
   // useEffect:
   // no dependency array --> update for any state change

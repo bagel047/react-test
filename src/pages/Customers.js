@@ -14,7 +14,12 @@ export default function Customers() {
   const navigate = useNavigate();
 
   const url = baseUrl + "api/customers/";
-  const { data: { customers } = {}, errorStatus } = useFetch(url, {
+  const {
+    request,
+    appendData,
+    data: { customers } = {},
+    errorStatus,
+  } = useFetch(url, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -23,7 +28,11 @@ export default function Customers() {
   });
 
   useEffect(() => {
-    console.log(customers, errorStatus);
+    request();
+  }, []);
+
+  useEffect(() => {
+    // console.log(customers, errorStatus);
   });
 
   /*
@@ -54,6 +63,16 @@ export default function Customers() {
   */
 
   function addCustomer(name, industry) {
+    let newData = {
+      name: name,
+      industry: industry,
+    };
+    appendData(newData);
+
+    if (!errorStatus) {
+      toggleShow();
+    }
+
     /*
     let data = {
       name: name,
